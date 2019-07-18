@@ -83,6 +83,11 @@ namespace Menufuehrung_Vorlage
                         StundenplanTextdatei();
                         break;
 
+                    case 7:
+                        // Noten in Datenbank speichern
+                        TestUndAuswahlDatenbank();
+                        break;
+
                     default:
                         Console.Clear();
                         Console.WriteLine("Das Programm wird beendet!");
@@ -92,6 +97,129 @@ namespace Menufuehrung_Vorlage
             } while (iAuswahl != 0);
 
             Console.ReadLine();
+        }
+
+        static void TestUndAuswahlDatenbank()
+        {
+            if(ArrayAWPSchriftlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayAWPSchriftlich, 's', "AWP");
+            }
+            if(ArrayAWPMuendlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayAWPMuendlich, 'm', "AWP");
+            }
+            if (ArrayITSSchriftlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayITSSchriftlich, 's', "ITS");
+            }
+            if (ArrayITSMuendlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayITSMuendlich, 'm', "ITS");
+            }
+            if (ArrayVSSchriftlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayVSSchriftlich, 's', "VS");
+            }
+            if (ArrayVSMuendlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayVSMuendlich, 'm', "VS");
+            }
+            if (ArrayBWPSchriftlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayBWPSchriftlich, 's', "BWP");
+            }
+            if (ArrayBWPMuendlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayBWPMuendlich, 'm', "BWP");
+            }
+            if (ArrayEnglischSchriftlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayEnglischSchriftlich, 's', "Englisch");
+            }
+            if (ArrayEnglischMuendlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayEnglischMuendlich, 'm', "Englisch");
+            }
+            if (ArraySportSchriftlich != null)
+            {
+                NotenSpeichernDatenbank(ArraySportSchriftlich, 's', "Sport");
+            }
+            if (ArraySportMuendlich != null)
+            {
+                NotenSpeichernDatenbank(ArraySportMuendlich, 'm', "Sport");
+            }
+            if (ArrayDeutschSchriftlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayDeutschSchriftlich, 's', "Deutsch");
+            }
+            if (ArrayDeutschMuendlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayDeutschMuendlich, 'm', "Deutsch");
+            }
+            if (ArrayReligionSchriftlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayReligionSchriftlich, 's', "Religion");
+            }
+            if (ArrayReligionMuendlich != null)
+            {
+                NotenSpeichernDatenbank(ArrayReligionMuendlich, 'm', "Religion");
+            }
+            if (ArraySozialkundeSchriftlich != null)
+            {
+                NotenSpeichernDatenbank(ArraySozialkundeSchriftlich, 's', "Sozialkunde");
+            }
+            if (ArraySozialkundeMuendlich != null)
+            {
+                NotenSpeichernDatenbank(ArraySozialkundeMuendlich, 'm', "Sozialkunde");
+            }
+        }
+
+        // Noten in Datenbank speichern mit stored procedure
+        static void NotenSpeichernDatenbankSP(int[] ArrayNoten, char cNoteArt, string sFach)
+        {
+
+        }
+
+        // Noten in Datenbank speichern mit SQL Query
+        static void NotenSpeichernDatenbank(int[] ArrayNoten, char cNoteArt, string sFach)
+        {
+            string sConnectionString = "Host=localhost;Username=postgres;Password=postgres;Database=postgres";
+            int iArrayLaenge = ArrayNoten.Length;
+            string sNoten = "";
+            int i = 0;
+            string sDatum = "";
+
+            // Noten als String verketten
+            do
+            {
+                sNoten = sNoten + Convert.ToString(ArrayNoten[i]) + ",";
+
+                i++;
+            } while (i < iArrayLaenge);
+
+            // Aktuelles Datum
+            sDatum = Convert.ToString(DateTime.Now);
+
+            using (var Connection = new NpgsqlConnection(sConnectionString))
+            {
+                Connection.Open();
+
+                using (var Command = new NpgsqlCommand())
+                {
+                    Command.Connection = Connection;
+//                    Command.CommandText = "INSERT INTO notenverwaltung.noten(fach, notenart, anzahl_noten, noten) VALUES ('"+sFach+"', '"+cNoteArt+"', "+iArrayLaenge+", '"+sNoten+"')";  //(@p)";
+                    Command.CommandText = "INSERT INTO notenverwaltung.noten(fach, notenart, anzahl_noten, noten, datum) VALUES (@p1, @p2, @p3, @p4, '" + sDatum + "')";
+                    // Werte einsetzen
+                    Command.Parameters.AddWithValue("p1", sFach);
+                    Command.Parameters.AddWithValue("p2", cNoteArt);
+                    Command.Parameters.AddWithValue("p3", iArrayLaenge);
+                    Command.Parameters.AddWithValue("p4", sNoten);
+                    Command.ExecuteNonQuery();
+                    
+                }
+
+            }
         }
 
         // Stundenplan in .txt Datei schreiben
@@ -316,6 +444,7 @@ namespace Menufuehrung_Vorlage
             Console.WriteLine("<4>: Stundenplan ausgeben");
             Console.WriteLine("<5>: Stundenplan bearbeiten");
             Console.WriteLine("<6>: Stundenplan in Textdatei schreiben");
+            Console.WriteLine("<7>: Noten in Datenbank speichern");
             Console.WriteLine("<0>: Programm beenden\n");
             Console.WriteLine("Bitte geben sie ihre Wahl ein:");
 
