@@ -103,7 +103,8 @@ namespace Menufuehrung_Vorlage
         {
             if(ArrayAWPSchriftlich != null)
             {
-                NotenSpeichernDatenbank(ArrayAWPSchriftlich, 's', "AWP");
+                NotenSpeichernDatenbankSP(ArrayAWPSchriftlich,'m',"AWP");
+                //NotenSpeichernDatenbank(ArrayAWPSchriftlich, 's', "AWP");
             }
             if(ArrayAWPMuendlich != null)
             {
@@ -178,6 +179,16 @@ namespace Menufuehrung_Vorlage
         // Noten in Datenbank speichern mit stored procedure
         static void NotenSpeichernDatenbankSP(int[] ArrayNoten, char cNoteArt, string sFach)
         {
+            string sConnectionString = "Host=localhost;Username=postgres;Password=postgres;Database=postgres";
+
+            using (var Connection = new NpgsqlConnection(sConnectionString))
+            {
+                Connection.Open();
+                // Prozedur aufrufen
+                using (var cmd = new NpgsqlCommand("Call notenverwaltung.insert_noten('AWP','s',2,'3,1')", Connection)) 
+                using (var reader = cmd.ExecuteReader()) ;
+
+            }
 
         }
 
@@ -208,7 +219,6 @@ namespace Menufuehrung_Vorlage
                 using (var Command = new NpgsqlCommand())
                 {
                     Command.Connection = Connection;
-//                    Command.CommandText = "INSERT INTO notenverwaltung.noten(fach, notenart, anzahl_noten, noten) VALUES ('"+sFach+"', '"+cNoteArt+"', "+iArrayLaenge+", '"+sNoten+"')";  //(@p)";
                     Command.CommandText = "INSERT INTO notenverwaltung.noten(fach, notenart, anzahl_noten, noten, datum) VALUES (@p1, @p2, @p3, @p4, '" + sDatum + "')";
                     // Werte einsetzen
                     Command.Parameters.AddWithValue("p1", sFach);
