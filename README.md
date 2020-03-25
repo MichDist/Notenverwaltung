@@ -6,7 +6,7 @@ In a later assignement the application was supposed to support a schedule. It wa
 The aim of these school assignements was to learn about arrays and practice basic programming skills.
 
 I decided to extend the application with some additional features in order to learn more about certain topics.
-Therefore I started by creating a new table in a Postgresql database in which the entered grades including other relevant information such a the subject, date, etc. could be stored. There are two way in order to achieve this: 
+Therefore I started by creating a new table in a Postgresql database in which the entered grades including other relevant information such a the subject, date, etc. could be stored. There are two ways in order to achieve this: 
 1. Create the SQL string directly in the application and then send it to the database.
 2. Create a stored procedure in the database that can be called from the application. 
 
