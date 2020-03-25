@@ -2,7 +2,7 @@
 This application is the the result of a school assignement which was then extented with some features I thought were useful.
 
 The inital task was to create a command line application in which the user can enter his grades for every subject. These grades can be changed later on as well. Furthermore there are options to review entered grades and calculate the overall average and the corresponding overall grade. 
-In a later assignement the application was supposed to support a schedule. It was initalised with our current schedule, but the user can change it by selecting the day and hour. Finally the user can print the formatted schedule in a .txt file.
+In a later assignement the application was supposed to support a schedule. It was initalized with our current schedule, but the user can change it by selecting the day and hour. Finally the user can print the formatted schedule in a .txt file.
 The aim of these school assignements was to learn about arrays and practice basic programming skills.
 
 I decided to extend the application with some additional features in order to learn more about certain topics.
